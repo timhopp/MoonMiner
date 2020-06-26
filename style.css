@@ -1,0 +1,16 @@
+html{
+  overflow: hidden;
+}
+
+body{
+  background-image: url("https://i.pinimg.com/originals/ab/9c/44/ab9c44504ff654c8cb38d61b23f588a7.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: 'Permanent Marker', cursive !important;
+}
+
+.bg-purp{
+  background-color: #331832a6 !important;
+  color: #759AAB !important;
+
+}
