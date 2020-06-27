@@ -1,5 +1,5 @@
 html{
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 body{
@@ -11,6 +11,9 @@ body{
 
 .bg-purp{
   background-color: #331832a6 !important;
-  color: #759AAB !important;
 
+}
+
+.potatoImg{
+  max-width: 200px;
 }
