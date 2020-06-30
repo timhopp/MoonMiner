@@ -1,7 +1,5 @@
-let collectionInterval 
-
 let cheese = {
-  count: 20000,
+  count: 499,
   shovelCount: 0,
   oxCount: 0,
   tractorCount: 0,
@@ -40,10 +38,11 @@ let cheeseModifier = {
 }
 
 function mine(){
-cheese.count += (1 + (cheese.shovelCount*clickUpgrade.shovel.multiplier) + (cheese.oxCount*clickUpgrade.ox.multiplier))
- console.log(cheese)
+cheese.count += (1 + (cheese.shovelCount*clickUpgrade.shovel.multiplier) + (cheese.oxCount*clickUpgrade.ox.multiplier));
  drawCheese()
  drawPotato()
+ drawStore()
+ 
 }
 
 function drawCheese(){
@@ -63,14 +62,11 @@ function drawCheese(){
 function drawPotato(){
   let template = '';
   template += `
-  <div class="row card bg-purp">
-  <img class = "potatoImg mx-auto my-auto" src="https://i.pinimg.com/originals/dd/8a/41/dd8a410fb404f776e3cad0927c5e809e.png">
-</div>
-<div class="row justify-content-center card bg-purp">
-  <h4 class="text-center text-warning">Potato Count: ${cheese.count}</h4>
-</div>
+  <div class="row mx-auto my-auto">
+   <img id = "potatoImg" class="potatoImg mx-auto my-auto potatoShadow" src="https://i.pinimg.com/originals/dd/8a/41/dd8a410fb404f776e3cad0927c5e809e.png">
+  <h2 class=" potatoText text-center text-warning pt-5">${cheese.count}</h2>
+  </div>
  `
-
  document.getElementById('potato').innerHTML= template
 }
 
@@ -95,52 +91,82 @@ function drawStore(){
           <h2 class="text-warning text-center p-2">Store</h2>
     
             <div class="row justify-content-center pb-4">
-              <button classId= 'shovel' class="btn btn-warning" onclick="buyShovel()">Shovel</button>
+              <button id= 'shovel' class="btn btn-warning itemGone" disabled onclick="buyShovel()">Shovel</button>
               <h4 class="my-auto text-warning pl-1 pr-5"> = ${clickUpgrade.shovel.price}</h4>
-              <button classId= 'ox' class="btn btn-warning" onclick="buyOx()">Ox & Plow</button>
+              <button id= 'ox' class="btn btn-warning itemGone" disabled onclick="buyOx()">Ox & Plow</button>
               <h4 class="my-auto text-warning pl-1"> = ${clickUpgrade.ox.price}</h4>
             </div>
         
           <div class="row justify-content-center pb-4">
-            <button classId= 'tractor' class="btn btn-warning" onclick="buyTractor()">Tractor</button>
+            <button id= 'tractor' class="btn btn-warning itemGone" disabled onclick="buyTractor()">Tractor</button>
             <h4 class="my-auto text-warning pl-1 pr-5"> = ${automaticUpgrade.tractor.price}</h4>
     
-            <button classId= 'potatoMobile' class="btn btn-warning" onclick='buyPotato()'>Potato Mobile!</button>
+            <button id= 'potatoMobile' class="btn btn-warning itemGone" disabled onclick='buyPotato()'>Potato Mobile!</button>
             <h4 class="my-auto text-warning pl-1"> = ${automaticUpgrade.potatoMobile.price}</h4>
           </div>
           
         </div>
    `
-   document.getElementById('store').innerHTML = template
-   drawPotato()
 
-}
+   //* Figure out how to only hide buttons till you were able to purchase it ONCE, even if you cannot anymore
+   document.getElementById('store').innerHTML = template
+   if(cheese.count >= clickUpgrade.shovel.price){
+    document.getElementById('shovel').removeAttribute('disabled')
+   }
+   if(cheese.count >= 50 || (cheeseModifier.tCM>= 1 && cheese.shovelCount >=1)){
+    document.getElementById('shovel').classList.remove('itemGone')
+   }
+
+   if(cheese.count >= clickUpgrade.ox.price){
+   document.getElementById('ox').removeAttribute('disabled')
+  }
+   if(cheese.count >= 150 || (cheeseModifier.tCm>= 1)){
+    document.getElementById('ox').classList.remove('itemGone')
+   }
+
+   if(cheese.count >= automaticUpgrade.tractor.price){
+    document.getElementById('tractor').removeAttribute('disabled')
+   }
+
+   if(cheese.count >= 500 || (cheeseModifier.tCM>= 1 && cheese.tractorCount >=1)){
+    document.getElementById('tractor').classList.remove('itemGone')
+   }
+
+   if(cheese.count >= automaticUpgrade.potatoMobile.price){
+    document.getElementById('potatoMobile').removeAttribute('disabled')
+   }
+
+   if(cheese.count >= 10000 || (cheeseModifier.tCM>= 1 && cheese.potatoCount >=1)){
+    document.getElementById('potatoMobile').classList.remove('itemGone')
+   }
+
+   drawPotato()
+  }
+
 
 function buyShovel(){
-  if(cheese.count >= 50){
-    cheese.count -= 50;
+  if(cheese.count >= clickUpgrade.shovel.price){
+    cheese.count -= clickUpgrade.shovel.price;
     cheese.shovelCount++
+    cheese.total++
     clickUpgrade.shovel.price += 50;
     cheeseModifier.tCM += 2;
     alert('Shovel Purchased')
-  } else {
-    alert('You dont have enough money')
-  }
+  } 
   drawCheese()
   drawAuto()
   drawStore()
 }
 
 function buyOx(){
-  if(cheese.count >= 150){
-    cheese.count -= 150;
+  if(cheese.count >= clickUpgrade.ox.price){
+    cheese.count -= clickUpgrade.ox.price;
     cheese.oxCount++
+    cheese.total++
     clickUpgrade.ox.price += 150;
     cheeseModifier.tCM += 10;
     alert('Ox & Plow Purchased')
-  } else {
-    alert('You dont have enough money')
-  }
+  } 
   drawCheese()
   drawAuto()
   drawStore()
@@ -148,9 +174,10 @@ function buyOx(){
 
 
 function buyTractor(){
-  if(cheese.count >= 500){
-    cheese.count -= 500;
+  if(cheese.count >= automaticUpgrade.tractor.price){
+    cheese.count -= automaticUpgrade.tractor.price;
     cheese.tractorCount++
+    cheese.total++
     cheeseModifier.tCM += 30;
     cheeseModifier.cPS += 10;
     automaticUpgrade.tractor.quantity++
@@ -159,16 +186,15 @@ function buyTractor(){
     drawCheese()
     drawAuto()
     drawStore()
-  } else {
-    alert('You dont have enough money')
-  }
+  } 
   startInterval()
 }
 
 function buyPotato(){
-  if(cheese.count >= 10000 ){
-    cheese.count -= 10000;
+  if(cheese.count >= automaticUpgrade.potatoMobile.price){
+    cheese.count -= automaticUpgrade.potatoMobile.price;
     cheese.potatoCount++
+    cheese.total++
     cheeseModifier.tCM += 300;
     cheeseModifier.cPS += 100;
     automaticUpgrade.potatoMobile.price += 10000;
@@ -177,9 +203,7 @@ function buyPotato(){
     drawCheese()
     drawAuto()
     drawStore()
-  } else {
-    alert('You dont have enough money')
-  }
+  } 
   startInterval()
 }
 
@@ -193,6 +217,7 @@ function collectAutoUpgrades(){
   drawCheese()
   drawAuto()
   drawPotato()
+  drawStore()
 }
 
 function startInterval(){

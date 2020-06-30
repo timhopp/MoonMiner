@@ -11,9 +11,28 @@ body{
 
 .bg-purp{
   background-color: #331832a6 !important;
-
 }
 
 .potatoImg{
-  max-width: 200px;
+  max-width: 300px;
+  position: relative;
 }
+
+.potatoText{
+  position: absolute;
+  text-align: center;
+  top: 26%;
+  left: 31%;
+}
+
+
+.potatoShadow{
+  filter: drop-shadow(4px 8px 12px #292b2c);
+}
+
+
+.itemGone{
+  filter: drop-shadow(2px 4px 6px #ff0000) contrast(0);
+}
+
+
