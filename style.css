@@ -23,6 +23,14 @@ body{
   text-align: center;
   top: 26%;
   left: 31%;
+  user-select: none;/* Standard */
+}
+
+.imgText{
+  position: absolute;
+  top: 81%;
+  left: 39%;
+
 }
 
 
